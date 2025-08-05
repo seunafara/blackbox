@@ -1,0 +1,37 @@
+{
+  "short_name": "Predeet",
+  "name": "Predeet",
+  "description": "Neural Network Editor",
+  "icons": [
+    {
+      "src": "/images/logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/images/logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "id": "/?source=pwa",
+  "start_url": "/?source=pwa",
+  "background_color": "#f0f0f0",
+  "display": "fullscreen",
+  "scope": "/",
+  "theme_color": "#f0f0f0",
+  "screenshots": [
+    {
+      "src": "/images/screenshot1.png",
+      "type": "image/png",
+      "sizes": "996x1112",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/images/screenshot1.png",
+      "type": "image/png",
+      "sizes": "996x1112",
+      "form_factor": "narrow"
+    }
+  ]
+}

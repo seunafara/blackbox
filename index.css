@@ -1,0 +1,199 @@
+html {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"
+}
+body {
+  min-height: 100vh;
+  min-width: 340px;
+  display: flex;
+  background-color: #f0f0f0;
+  margin: 0;
+}
+.main {
+  display: flex;
+  width: 100%;
+  position: relative;
+  padding-bottom: 100px;
+}
+.hidden {
+  display: none !important;
+}
+#settings-icon-button {
+  padding: 4px;
+  border-radius: 100%;
+  height: 48px;
+  width: 48px;
+  background-color:rgba(4, 0, 0, 0.12) !important;
+}
+#settings-icon-button > span {
+  font-size: 24px;
+  color: white;
+}
+#train-editor {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  column-gap: 32px;
+  row-gap: 16px;
+  margin-right: 16px;
+  width: 100%;
+  height: max-content;
+}
+#test-editor {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+  width: 100%
+}
+#settings-editor {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+  width: 100%
+}
+.settings-data-box{
+  row-gap: 8px;
+}
+.back-button {
+  font-size: 24px;
+  display: flex;
+  width: fit-content;
+  margin-bottom: 14px;
+  cursor: pointer;
+  background: none;
+  border: 0px;
+  align-self: start;
+}
+.data-box {
+  display: flex;
+  flex-direction: column;
+  border: 0.1px solid rgb(180, 157, 157, 0.52);
+  padding: 24px;
+  height: max-content;
+  background-color: rgba(255, 255, 255, 0.78)
+}
+.text-right {
+  text-align: right;
+}
+.data-wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 3.5rem;
+  margin-bottom: 8px;
+}
+.settings-wrapper{
+  align-items: center;
+}
+.output-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 12px;
+}
+.data {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+}
+.data-inputs {
+  display: flex;
+  gap: 6px;
+}
+.data-b {
+  align-items: flex-end;
+}
+.form-input {
+  appearance: none;
+  background-color: #fff;
+  border-color: #6b7280;
+  border-width: 1px;
+  border-radius: 0px;
+  padding-top: 0.5rem;
+  padding-right: 0.75rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+.container {
+  padding: 16px 32px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#new-data-button {
+  height: 32px;
+  cursor: pointer;
+  width: 100%;
+}
+#control-panel {
+  position: absolute;
+  bottom: 0%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  padding: 16px 28px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  column-gap: 14px;
+  z-index: 999;
+}
+#control-panel > button {
+  outline: none;
+  border: none;
+  font-size: 14px;
+  background: none;
+  cursor: pointer;
+}
+.primary-button {
+  padding: 14px 18px;
+  background-color: #1d4ed8 !important;
+  color: #fff;
+  font-size: 18px !important;
+  border-radius: 24px;
+}
+@media only screen and (max-width: 600px) {}
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {}
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  #control-panel {
+    bottom: 1%;
+  }
+}
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {}
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  .glass-container {}
+  #new-data-button {
+    height: 100%;
+    min-height: 320px;
+    font-size: 32px;
+  }
+  .container {
+    padding: 16px 77px;
+    flex-direction: row;
+    justify-items: unset;
+    align-items: unset;
+  }
+  #train-editor {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .data-box {
+    padding: 32px;
+  }
+  #test-editor {
+    height: unset
+  }
+  #settings-editor {
+    height: unset
+  }
+  .back-button {
+    font-size: 32px;
+  }
+}
