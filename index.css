@@ -141,6 +141,7 @@ body {
   background: #fff;
   column-gap: 14px;
   z-index: 999;
+  width: max-content;
 }
 #control-panel > button {
   outline: none;
