@@ -13,6 +13,14 @@ export default {
       icon: document.getElementById("settings-icon-button"),
       save: document.getElementById("settings-save-button")
     },
+    train: {
+      stop: document.getElementById("stop-training-button")
+    }
+  },
+  controlPanel: {
+    training: {
+      text: document.getElementById("training-net-text")
+    }
   },
   editor: {
     test: document.getElementById("test-editor"),

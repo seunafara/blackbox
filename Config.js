@@ -3,7 +3,7 @@ export default {
   routes: {
     index: "index.html"
   },
-  accuracyTestMark: 0,
+  accuracyTestMark: 51,
   maxValue: 1,
   net: {
     data: {
@@ -26,11 +26,14 @@ export default {
       config: {
         log: true,
         logPeriod: 100,
-        iterations: 20_000
+        iterations: 1
       },
     },
     types: {
       simulate: true, // || "local i.e false"
+    },
+    worker: {
+      name: 'Networker.js'
     }
   },
   data: {

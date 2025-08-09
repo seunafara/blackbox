@@ -1,4 +1,3 @@
-// import Config from './Config.js'
 import Elements from './Elements.js'
 class Settings {
   constructor() {
@@ -42,7 +41,27 @@ class Settings {
           mode: "number",
           classes: ["form-input"],
         }
-      }
+      },
+      useGPU: {
+        name: "Run on GPU",
+        classes: [],
+        value: false,
+        element: {
+          type: "input",
+          mode: "checkbox",
+          classes: ["settings-checkbox-input"],
+        }
+      },
+      iterations: {
+        name: "Iterations",
+        classes: [],
+        value: 20_000,
+        element: {
+          type: "input",
+          mode: "number",
+          classes: ["form-input"],
+        }
+      },
     }
   }
   backButtonClick(trainEditor, trainEditorData){
@@ -88,9 +107,11 @@ class Settings {
       dataWrapperElement.classList.add("data-wrapper")
       dataWrapperElement.classList.add("settings-wrapper")
       const maxInputLabel = document.createElement("label")
+      maxInputLabel.setAttribute("for", idx)
       maxInputLabel.innerText = setting.name
       // Switch
       const maxInputElement = document.createElement(setting.element.type)
+      maxInputElement.setAttribute("id", idx)
       setting.element.classes.forEach(x => maxInputElement.classList.add(x))
       if (setting.element.mode === "checkbox") {
         setting.value ? maxInputElement.setAttribute("checked", setting.value) : maxInputElement.removeAttribute("checked")

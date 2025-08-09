@@ -17,6 +17,7 @@ body {
 .hidden {
   display: none !important;
 }
+#stop-training-button,
 #settings-icon-button {
   padding: 4px;
   border-radius: 100%;
@@ -24,9 +25,16 @@ body {
   width: 48px;
   background-color:rgba(4, 0, 0, 0.12) !important;
 }
+#stop-training-button,
 #settings-icon-button > span {
-  font-size: 24px;
+  font-size: 24px !important;
   color: white;
+}
+#stop-training-button > span {
+  color: red;
+}
+#training-net-text {
+  color: darkslategray;
 }
 #train-editor {
   display: grid;
@@ -53,6 +61,37 @@ body {
   height: 70vh;
   width: 100%
 }
+.context-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  align-self: end;
+  position: relative;
+}
+.context-menu:hover ul {
+  display: flex;
+}
+.context-menu ul {
+  display: none;
+  flex-direction: column;
+  background: white;
+  border: 1px solid #f0f0f0;
+  box-shadow: -1px 3px 29px 6px #f0f0f0;
+  padding: 8px 0px;
+  position: absolute;
+  top: 8px;
+  z-index: 888;
+}
+.context-menu li {
+  list-style-type: none; 
+  padding: 8px 32px;
+  cursor: pointer;
+}
+.context-menu-icon {
+  font-size: 24px;
+  cursor: pointer;
+  width: max-content;
+}
 .settings-data-box{
   row-gap: 8px;
 }
@@ -72,7 +111,8 @@ body {
   border: 0.1px solid rgb(180, 157, 157, 0.52);
   padding: 24px;
   height: max-content;
-  background-color: rgba(255, 255, 255, 0.78)
+  background-color: rgba(255, 255, 255, 0.78);
+  row-gap: 24px;
 }
 .text-right {
   text-align: right;
@@ -81,7 +121,6 @@ body {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   column-gap: 3.5rem;
-  margin-bottom: 8px;
 }
 .settings-wrapper{
   align-items: center;
@@ -90,7 +129,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 12px;
 }
 .data {
   display: flex;
@@ -156,6 +194,9 @@ body {
   color: #fff;
   font-size: 18px !important;
   border-radius: 24px;
+}
+.settings-checkbox-input {
+  justify-self: left;
 }
 @media only screen and (max-width: 600px) {}
 /* Small devices (portrait tablets and large phones, 600px and up) */

@@ -22,8 +22,13 @@ self.addEventListener("message", async (e) => {
     if (typeof brain === 'undefined') {
       throw new Error('brain.js is not defined after loading attempt.');
     }
-    const net = new brain.NeuralNetwork(data.config);
-    net.train(data.trainingData, data.trainConfig);
+    const netConfig = data.config.net.config
+    const net = data.config.settings.useGPU.value ? new brain.NeuralNetworkGPU(netConfig) : new brain.NeuralNetwork(netConfig);
+    net.train(data.trainingData, {
+      ...data.config.net.train,
+      // User setting || Default config value
+      iterations: Number(data?.config?.settings?.iterations?.value) || data.config.net.train.iterations,
+    });
     self.postMessage({
       cmd: "net-refreshed",
       net: net.toJSON()

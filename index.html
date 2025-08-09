@@ -8,22 +8,27 @@
     <link rel="stylesheet" href="./index.css" />
     <link rel="manifest" href="/manifest.json">
     <script type="module" src="./brain.js"></script>
-    <script type="module" src="./script.js"></script>
-    
+    <script type="module" src="./script.js"></script>  
   </head>
   <body>
     <main id="main" class="main">
       <div id="container" class="container">
       </div>
       <div id="control-panel">
+          <p id="training-net-text" class="hidden">Training Net...</p>
           <button id="train-net-button" class="primary-button">Train Net</button>
-          <button id="test-net-button" class="primary-button hidden">Test Net</button>
-          <button id="settings-save-button" class="primary-button hidden">Save</button>
           <button id="settings-icon-button">
             <span>
               &#x26ED;
             </span>
           </button>
+          <button id="stop-training-button" class="hidden">
+            <span>
+              &#x25A0;
+            </span>
+          </button>
+          <button id="test-net-button" class="primary-button hidden">Test Net</button>
+          <button id="settings-save-button" class="primary-button hidden">Save</button>      
       </div>
     </main>
   </body>

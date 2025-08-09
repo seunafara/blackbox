@@ -2,7 +2,7 @@ import Config from './Config.js'
 import Elements from './Elements.js'
 class TestEditor {
   constructor() {
-    this.form = Config.net.data.blank
+    this.form = structuredClone(Config.net.data.blank)
   }
   render() {
     const parent = this

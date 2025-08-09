@@ -1,4 +1,4 @@
-const OFFLINE_VERSION = "0.0.1";
+const OFFLINE_VERSION = "prod-0.0.3";
 const CACHE_NAME = `offline-${OFFLINE_VERSION}`;
 const OFFLINE_URL = "index.html";
 const OFFLINE_ASSETS = [

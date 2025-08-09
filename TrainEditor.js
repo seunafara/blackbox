@@ -1,10 +1,12 @@
 import Config from './Config.js';
 import Elements from './Elements.js';
 class TrainEditor {
-  constructor(data) {
+  constructor(data, settings) {
+    this.settings = settings
     this.data = data
   }
-  render(newDataBox, settingsConfig) {
+  render() {
+    const settingsConfig = this.settings
     const parent = this
     const root = document.createElement("section")
     root.setAttribute("id", "train-editor")
@@ -14,22 +16,57 @@ class TrainEditor {
     addNewButton.addEventListener("click", (e) => {
       e.preventDefault()
       new Promise((resolve, _) => {
-        this.data.push(Config.net.data.blank)
+        parent.data.push(structuredClone(Config.net.data.blank))
         document.getElementById("train-editor").remove()
-        resolve("Done")
-      }).then(() => {
-        parent.render(this.data, settingsConfig)
+        resolve(parent.data)
+      }).then((x) => {
+        parent.render(x, settingsConfig)
       })
     })
     root.append(addNewButton)
     const trainEditorElement = root
     const lastChild = trainEditorElement.lastElementChild
-    const formsData = newDataBox.length ? newDataBox : this.data
-    for (let dataBoxIdx = 0; dataBoxIdx < formsData.length; dataBoxIdx++) {
-      const dataBox = formsData[dataBoxIdx];
+    for (let dataBoxIdx = 0; dataBoxIdx < this.data.length; dataBoxIdx++) {
+      const dataBox = this.data[dataBoxIdx];
       // Create Data Box
       const newDataBoxElement = document.createElement("div")
       newDataBoxElement.classList.add("data-box")
+      // Add Context Menu
+      const contextMenu = document.createElement("div")
+      contextMenu.classList.add("context-menu")
+      const contextMenuIcon = document.createElement("div")
+      contextMenuIcon.innerHTML = "&#8942;"
+      contextMenuIcon.classList.add("context-menu-icon")
+      const contextMenuItems = document.createElement("ul")
+      // Loop context menu items
+      const contextMenuDeleteItem = document.createElement("li")
+      contextMenuDeleteItem.innerText = "Delete"
+      contextMenuDeleteItem.addEventListener("click", function() {
+        new Promise((resolve, _) => {
+          const dataClone = structuredClone(parent.data)
+          dataClone.splice(dataBoxIdx, 1)
+          document.getElementById("train-editor").remove()
+          parent.data.splice(0)
+          parent.data.push(...dataClone)
+          resolve(dataClone)
+        }).then((x) => {
+          parent.render(x, settingsConfig)
+        })
+      })
+      contextMenuItems.append(contextMenuDeleteItem)
+      // END Loop context menu items
+      // Context Menu on Click - show items
+      contextMenu.addEventListener("click", function() {
+        const ul = contextMenu.querySelector("ul")
+        if (ul.style.display === "" || ul.style.display === "none"){
+          ul.style.display = "flex"
+        } else {
+          ul.style.display = "none"
+        }
+      })
+      contextMenu.append(contextMenuIcon)
+      contextMenu.append(contextMenuItems)
+      newDataBoxElement.append(contextMenu)
       // Add Input wrapper
       const dataWrapperElement = document.createElement("div")
       dataWrapperElement.classList.add("data-wrapper")
@@ -54,7 +91,7 @@ class TrainEditor {
             outputInputElement.classList.add("form-input")
             outputInputElement.setAttribute("type", "number")
             outputInputElement.setAttribute("min", 0)
-            outputInputElement.setAttribute("max", settingsConfig?.inputMaxValue?.value || Config.maxValue)
+            outputInputElement.setAttribute("max", settingsConfig?.data.inputMaxValue?.value || Config.maxValue)
             outputInputElement.setAttribute("value", outputValue)
             const outputDataboxIndex = settingsConfig?.isNew ? this.data.length - 1 : dataBoxIdx
             outputInputElement.setAttribute("name", `${outputDataboxIndex}-output-${outputIndex}`)

@@ -1,16 +1,17 @@
 import Config from './Config.js'
+import Elements from './Elements.js'
 import { shuffle } from './Helpers.js'
 class Net {
-  constructor() {
-    this.worker = new Worker('Networker.js')
+  constructor(data, settings) {
+    this.data = data
+    this.workerName = Config.net.worker.name
+    this.worker = new Worker(Config.net.worker.name)
     this.inputSet = null
     this.outputSet = null
     this.inputSize = 0
     this.outputSize = 0
     this.config = {
       binaryThresh: 0.5,
-      hiddenLayers: [3],
-      activation: 'sigmoid',
       simulate: {
         inputSize: 0,
         outputSize: 0
@@ -18,7 +19,9 @@ class Net {
       worker: {
         cmd: "ai"
       }
-    }
+    },
+    this.settings = settings
+    this.trained = null
   }
   flattenInputs(x) {
     return ({ input: x.input.flat(Infinity), output: x.output })
@@ -31,14 +34,17 @@ class Net {
     this.outputSet = [...new Set([...outputsTo1D])]
     return [...comboSet]
   }
-  prepareData(editorUIdata, settingsConfig) {
+  prepareData() {
+    this.validateSettings()
+    const settingsConfig = this.settings.data
+    const editorUIdata = this.data
     const shouldSimulate = Boolean(settingsConfig.simulate.value) === Config.net.types.simulate
     let data
     switch (shouldSimulate) {
       case true:
         this.mapSet(editorUIdata)
         this.setIOsizes(editorUIdata[0].input.flat().length, editorUIdata[0].output.length)
-        data = this.simulate(editorUIdata, settingsConfig)
+        data = this.simulate().map(this.flattenInputs)
         break
       default:
         data = editorUIdata.map(this.flattenInputs)
@@ -46,12 +52,51 @@ class Net {
     }
     return data
   }
+  async runWorker(e, testEditor) {
+    this.validateSettings()
+    const editorUIdata = this.data
+    const settingsData = this.settings.data
+    if (e.data instanceof Object) {
+      switch (e.data.cmd) {
+        case "net-refreshed":
+          if (Config.debug) console.log("received net ", e.data);
+          const testData = this.prepareData(editorUIdata, settingsData).map(this.flattenInputs)
+          const newNet = new brain.NeuralNetwork().fromJSON(e.data.net)
+          const shouldSimulate = Boolean(settingsData.simulate.value) === Config.net.types.simulate
+          const { accuracy } = this.validate(newNet, shouldSimulate ? editorUIdata.map(this.flattenInputs) : testData)
+          const accuracyToMatch = (settingsData.accuracyTestMark.value || Config.accuracyTestMark)
+          if (accuracy >= accuracyToMatch) {
+            // Assign net
+            this.trained = newNet
+            // Toggle Screen Action Button
+            Elements.controlPanel.training.text.classList.add("hidden")
+            Elements.button.train.stop.classList.add("hidden")
+            Elements.button.net.test.classList.remove("hidden")
+            Elements.button.net.train.classList.add("hidden")
+            Elements.button.settings.icon.classList.add("hidden")
+            // Render & Show Test Screen
+            testEditor.render()
+          } else {
+            this.worker.terminate()
+            this.worker = new Worker(this.workerName)
+            this.worker.addEventListener('message', async (e) => await this.runWorker(e, testEditor))
+            const trainingData = this.prepareData(editorUIdata, settingsData).map(this.flattenInputs)
+            this.train(trainingData, settingsData)
+          }
+          break;
+        default:
+          self.postMessage('Unknown command');
+      }
+    }
+  }
   setIOsizes(inputSize, outputSize) {
     this.config.simulate.inputSize = inputSize
     this.config.simulate.outputSize = outputSize
   }
-  simulate(editorUIdata, settingsConfig) {
-    if (Boolean(settingsConfig.simulate.value) !== Config.net.types.simulate) {
+  simulate() {
+    this.validateSettings()
+    const settingsData = this.settings.data
+    if (Boolean(settingsData.simulate.value) !== Config.net.types.simulate) {
       const errorMessage = "Error: Incorrect Train Type \nFix: Change train type to simulate"
       alert(errorMessage)
       throw new Error(errorMessage)
@@ -68,9 +113,8 @@ class Net {
       alert(errorMessage)
       throw new Error(errorMessage)
     }
-    let size = settingsConfig.simulateSize.value || Config.net.simulate.size
+    let size = settingsData.simulateSize.value || Config.net.simulate.size
     const data = []
-    this.mapSet(editorUIdata)
     const shuffleSet = (set) => String(shuffle(set)[0]).split("-").map(x => Number(x))
     while (size) {
       const input = Array.from({ length: 2 }, () => Array.from({ length: inputSize / 2 }, () => shuffleSet(this.inputSet)))
@@ -83,11 +127,25 @@ class Net {
     return data
   }
   train(trainingData) {
-    if (Config.debug) console.log("trainingData ", trainingData);
+    this.validateSettings()
+    const settingsData = this.settings.data
+    if (Config.debug) {
+      console.log("settingsConfig ", settingsData);
+      console.log("trainingData ", trainingData);
+    }
     this.worker.postMessage({
       cmd: this.config.worker.cmd,
-      config: this.config,
-      trainConfig: Config.net.train.config,
+      config: {
+        net: {
+          config: {
+            binaryThresh: this.config.binaryThresh,
+          },
+          train: {
+            ...Config.net.train.config
+          }
+        },
+        settings: settingsData
+      },
       trainingData,
     })
   }
@@ -108,6 +166,13 @@ class Net {
     console.log("Accuracy (%): ", accuracy);
     return {
       accuracy
+    }
+  }
+  validateSettings(){
+    if (!this.settings) {
+      const errorMessage = "Error: No Net Settings Found"
+      alert(errorMessage)
+      throw new Error(errorMessage)
     }
   }
 }
