@@ -62,6 +62,16 @@ class Settings {
           classes: ["form-input"],
         }
       },
+      hiddenLayers: {
+        name: "Hidden Layers (separate by commas)",
+        classes: [],
+        value: 3,
+        element: {
+          type: "input",
+          mode: "text",
+          classes: ["form-input"],
+        }
+      },
     }
   }
   backButtonClick(trainEditor, trainEditorData){
@@ -81,6 +91,11 @@ class Settings {
   }
   render(trainEditor, trainEditorData) {
     const parent = this
+    // Toggle Control panel buttons
+    Elements.button.settings.icon.classList.add("hidden")
+    Elements.button.net.train.classList.add("hidden")
+    Elements.button.settings.save.classList.remove("hidden")
+    // Hide Train Editor
     document.getElementById("train-editor").classList.add("hidden")
     // Settings Section
     const settingsEditor = document.createElement("section")

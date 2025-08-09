@@ -19,6 +19,7 @@ export default {
         output: 0,
       },
     },
+    hiddenLayers: [3],
     simulate: {
       size: 100,
     },

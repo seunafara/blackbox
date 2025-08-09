@@ -34,9 +34,6 @@ class Editor {
   }
   showSettings(){
     this.settings.render(this.editors.train, this.data)
-    Elements.button.settings.icon.classList.add("hidden")
-    Elements.button.net.train.classList.add("hidden")
-    Elements.button.settings.save.classList.remove("hidden")
   }
   saveSettings(){
     this.settings.backButtonClick(this.editors.train, this.data)

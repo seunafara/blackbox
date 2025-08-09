@@ -56,12 +56,13 @@ class Net {
     this.validateSettings()
     const editorUIdata = this.data
     const settingsData = this.settings.data
+    const hiddenLayers = settingsData.hiddenLayers.value ? (settingsData.hiddenLayers.value).split(",").map(x => Number(x)) : Config.net.hiddenLayers
     if (e.data instanceof Object) {
       switch (e.data.cmd) {
         case "net-refreshed":
           if (Config.debug) console.log("received net ", e.data);
           const testData = this.prepareData(editorUIdata, settingsData).map(this.flattenInputs)
-          const newNet = new brain.NeuralNetwork().fromJSON(e.data.net)
+          const newNet = new brain.NeuralNetwork(hiddenLayers).fromJSON(e.data.net)
           const shouldSimulate = Boolean(settingsData.simulate.value) === Config.net.types.simulate
           const { accuracy } = this.validate(newNet, shouldSimulate ? editorUIdata.map(this.flattenInputs) : testData)
           const accuracyToMatch = (settingsData.accuracyTestMark.value || Config.accuracyTestMark)
@@ -129,6 +130,7 @@ class Net {
   train(trainingData) {
     this.validateSettings()
     const settingsData = this.settings.data
+    const hiddenLayers = settingsData.hiddenLayers.value ? (settingsData.hiddenLayers.value).split(",").map(x => Number(x)) : Config.net.hiddenLayers
     if (Config.debug) {
       console.log("settingsConfig ", settingsData);
       console.log("trainingData ", trainingData);
@@ -139,6 +141,7 @@ class Net {
         net: {
           config: {
             binaryThresh: this.config.binaryThresh,
+            hiddenLayers  
           },
           train: {
             ...Config.net.train.config
