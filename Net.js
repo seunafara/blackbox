@@ -56,7 +56,8 @@ class Net {
     this.validateSettings()
     const editorUIdata = this.data
     const settingsData = this.settings.data
-    const hiddenLayers = settingsData.hiddenLayers.value ? (settingsData.hiddenLayers.value).split(",").map(x => Number(x)) : Config.net.hiddenLayers
+    const settingsHL = settingsData?.hiddenLayers?.value
+    const hiddenLayers = settingsHL ? String(settingsHL).split(",").map(x => Number(x)) : Config.net.hiddenLayers
     if (e.data instanceof Object) {
       switch (e.data.cmd) {
         case "net-refreshed":
@@ -130,7 +131,8 @@ class Net {
   train(trainingData) {
     this.validateSettings()
     const settingsData = this.settings.data
-    const hiddenLayers = settingsData.hiddenLayers.value ? (settingsData.hiddenLayers.value).split(",").map(x => Number(x)) : Config.net.hiddenLayers
+    const settingsHL = settingsData?.hiddenLayers?.value
+    const hiddenLayers = settingsHL ? String(settingsHL).split(",").map(x => Number(x)) : Config.net.hiddenLayers
     if (Config.debug) {
       console.log("settingsConfig ", settingsData);
       console.log("trainingData ", trainingData);
